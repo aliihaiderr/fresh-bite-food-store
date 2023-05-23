@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import loginSignupimage from '../assest/login-animation.gif';
 import {BiShow,BiHide} from "react-icons/bi";
 import { Link } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 
 const Login = () => {
   const [ showPassword, setShowPassword ] = useState(false);
   const [ data, setData] = useState({
-    firstName:"",
-    lastName:"",
     email:"",
     password:"",
-    confirmPassword:"",
   });
+  const navigate = useNavigate()
   console.log(data);
   const handleShowPassword = ()=> {
     setShowPassword((preve) => !preve)
@@ -28,12 +28,27 @@ const Login = () => {
     })
   }
   
-  const handleSubmit = (e)=>{
+  const handleSubmit = async(e)=>{
     e.preventDefault();
 
     const {email,password} = data;
     if (email && password) {
-        alert('Sucessfully Login')
+      const fetchData = await fetch(`${process.env.REACT_APP_SERVER_DOMIN}/login`,{
+        method : 'POST',
+        headers : {
+          'content-type': 'application/json'
+        },
+        body : JSON.stringify(data)
+      })
+      const dataRes = await fetchData.json()
+      console.log(dataRes)
+      toast(dataRes.message)
+      if(dataRes.alert) {
+        setTimeout(()=>{
+          navigate("/")
+        },1000);
+      }
+
     }
     else {
       alert('Please Enter Required Fields')
