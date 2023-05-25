@@ -29,7 +29,7 @@ const userSchema = mongoose.Schema({
   image: String,
 });
 
-//model
+//model for user
 const userModel = mongoose.model("user", userSchema);
 
 //api's
@@ -78,6 +78,35 @@ app.post("/login", (req, res) => {
     }
   });
 });
+
+
+//product section 
+const productSchema = mongoose.Schema({
+    name : String,
+    category : String,
+    image : String,
+    price : String,
+    description : String
+});
+
+//model
+const productModel = mongoose.model("product", productSchema);
+
+//save product in database
+//api for uploadProduct
+app.post('/uploadProduct',async(req, res)=>{
+    console.log(req.body)
+    const data = await productModel(req.body)
+    const datasave = await data.save() 
+    res.send({message : "Upload Successfully"})
+})
+
+//api for get categories data
+app.get("/product", async (req, res)=>{
+  const data = await productModel.find({})
+    res.send(JSON.stringify(data))
+})
+
 
 // server is running
 app.listen(PORT, () => console.log(`server is running at port : ${PORT}`));
