@@ -1,10 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const Homecard = ({ name, image, category, price,loading }) => {
+const Homecard = ({ name, image, category, price,loading,id }) => {
   return (
     <div className="bg-white shadow-md p-2 rounded min-w-[180px]">
       {name ? (
         <>
+        <Link to={`/menu/${id}`} onClick={()=>window.scrollTo({top:'0',behavior:'smooth'})}>
           <div className="w-40 min-h-[150px]">
             <img src={image} alt="img" className="h-full w-full" />
           </div>
@@ -16,6 +18,7 @@ const Homecard = ({ name, image, category, price,loading }) => {
             <span className="text-red-500">₨</span>
             <span> {price}</span>
           </p>
+          </Link>
         </>
       )
       :

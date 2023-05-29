@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
-import {useSelector} from 'react-redux'
-import Homecard from '../component/Homecard'
-import CardFeature from '../component/CardFeature'
-import {GrPrevious, GrNext} from 'react-icons/gr'
-import FilterProduct from '../component/FilterProduct'
+import React, { useRef } from 'react';
+import {useSelector} from 'react-redux';
+import Homecard from '../component/Homecard';
+import CardFeature from '../component/CardFeature';
+import {GrPrevious, GrNext} from 'react-icons/gr';
+import AllProduct from '../component/AllProduct';
 
 const Home = () => {
   const productData = useSelector((state) =>state.product.productList)
@@ -15,7 +15,6 @@ const Home = () => {
   const loadingArray = new Array(4).fill(null)
   const loadingArrayFeature = new Array(10).fill(null)
 
-
   const slideProductRef = useRef()
   const nextProduct =()=>{
     slideProductRef.current.scrollLeft += 200
@@ -23,27 +22,6 @@ const Home = () => {
   const preveProduct =()=>{
     slideProductRef.current.scrollLeft -= 200
   };
-
-
-  const categoryList = [...new Set(productData.map(el =>el.category))]
-  console.log(categoryList);
-
-  // filter data display
-  const [dataFilter ,setDataFilter] = useState([])
-  
-  useEffect(()=>{
-    setDataFilter(productData)
-  },[productData])
-
-
-  const handleFilterProduct = (category)=>{
-    const filter = productData.filter(el => el.category.toLowerCase() === category.toLowerCase())
-    setDataFilter(()=>{
-      return[
-        ...filter
-      ]
-    })
-  } 
   
   return (
     <div className='p-2 md:p-4'>
@@ -63,6 +41,7 @@ const Home = () => {
               return(
                 <Homecard
                   key={el._id}
+                  id={el._id}
                   image = {el.image}
                   name = {el.name}
                   price = {el.price}
@@ -98,6 +77,7 @@ const Home = () => {
                 return(
                   <CardFeature
                       key={el._id}
+                      id ={el._id}
                       image = {el.image}
                       name = {el.name}
                       price = {el.price}
@@ -111,34 +91,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className='my-5'>
-          <h2 className='font-bold text-2xl text-slate-800 mb-4'>Your Products</h2>
-          <div className='flex gap-4 justify-center overflow-scroll scrollbar-none'>
-              {
-                categoryList[0] && categoryList.map(el =>{
-                  return(
-                    <FilterProduct category={el} onClick={()=>handleFilterProduct(el)} />  
-                  )
-                })
-              }
-          </div>
-
-          <div className='flex flex-wrap justify-center gap-4'>
-                {
-                  dataFilter.map(el=>{
-                    return(
-                      <CardFeature 
-                        key ={el._id}
-                        image={el.image}
-                        name={el.name}
-                        price={el.price}
-                        category={el.category}
-                      />
-                    )
-                  })
-                }
-          </div>
-      </div>
+      <AllProduct heading={'Your Products'} />
     </div>
   )
 }
