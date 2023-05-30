@@ -8,12 +8,14 @@ const AllProduct = ({heading}) => {
   const categoryList = [...new Set(productData.map(el =>el.category))]
 
     // filter data display
+    const [filterby, setFilterBy] = useState("");
     const [dataFilter ,setDataFilter] = useState([])
     useEffect(()=>{
       setDataFilter(productData)
     },[productData])
   
     const handleFilterProduct = (category)=>{
+      setFilterBy(category)
       const filter = productData.filter(el => el.category.toLowerCase() === category.toLowerCase())
       setDataFilter(()=>{
         return[
@@ -31,11 +33,11 @@ const AllProduct = ({heading}) => {
               {
                 categoryList[0] ? categoryList.map(el =>{
                   return(
-                    <FilterProduct category={el} key={el} onClick={()=>handleFilterProduct(el)} />  
+                    <FilterProduct category={el} key={el} isActive={el.toLowerCase() === filterby.toLowerCase()} onClick={()=>handleFilterProduct(el)} />  
                   )
                 })
                 :
-                <div className="flex justify-center items-center h-full">
+                <div className="min-h-[150px] flex justify-center items-center">
                   <p>Loading...</p>
                 </div>
               }
